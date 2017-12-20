@@ -398,9 +398,9 @@ static int _index_job(const char *jobcomp)
 	 */
 	if ((xstrcmp(token, "200") != 0) && (xstrcmp(token, "201") != 0)) {
 		if (slurm_get_debug_flags() & DEBUG_FLAG_ESEARCH) {
-			info("%s: HTTP status code %s received from %s",
+			error("%s: HTTP status code %s received from %s",
 			     plugin_type, token, log_url);
-			info("%s: HTTP response:\n%s", plugin_type,
+			error("%s: HTTP response:\n%s", plugin_type,
 			     chunk.message);
 		}
 		rc = SLURM_ERROR;

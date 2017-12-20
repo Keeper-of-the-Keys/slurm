@@ -335,6 +335,7 @@ static int _index_job(const char *jobcomp)
 {
 	CURL *curl_handle = NULL;
 	CURLcode res;
+	struct curl_slist *http_headers = NULL;
 	struct http_response chunk;
 	int rc = SLURM_SUCCESS;
 	char *token = NULL;
@@ -357,10 +358,13 @@ static int _index_job(const char *jobcomp)
 	chunk.message = xmalloc(1);
 	chunk.size = 0;
 
+	http_headers = curl_slist_append(http_headers, "Content-Type: application/json");
+	
 	curl_easy_setopt(curl_handle, CURLOPT_URL, log_url);
 	curl_easy_setopt(curl_handle, CURLOPT_POST, 1);
 	curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDS, jobcomp);
 	curl_easy_setopt(curl_handle, CURLOPT_POSTFIELDSIZE, strlen(jobcomp));
+	curl_easy_setopt(curl_handle, CURLOPT_HTTPHEADER, http_headers);
 	curl_easy_setopt(curl_handle, CURLOPT_HEADER, 1);
 	curl_easy_setopt(curl_handle, CURLOPT_WRITEFUNCTION, _write_callback);
 	curl_easy_setopt(curl_handle, CURLOPT_WRITEDATA, (void *) &chunk);
